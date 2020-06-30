@@ -7,21 +7,21 @@
 
 using namespace std;
 
-float averageScore;//Æ½¾ù·Ö
-const int userNum = 943;//ÓÃ»§Êı
-const int itemNum = 1682;//ÏîÄ¿Êı
-const int factorNum = 10;//ÌØÕ÷Êı
-float learnRate = 0.005;//Ñ§Ï°ËÙÂÊ
-float regularization = 0.05;//ÕıÔò»¯ÏµÊı
+float averageScore;//å¹³å‡åˆ†
+const int userNum = 943;//ç”¨æˆ·æ•°
+const int itemNum = 1682;//é¡¹ç›®æ•°
+const int factorNum = 10;//ç‰¹å¾æ•°
+float learnRate = 0.005;//å­¦ä¹ é€Ÿç‡
+float regularization = 0.05;//æ­£åˆ™åŒ–ç³»æ•°
 
-float bi[itemNum];//ÏîÄ¿Æ«ÖÃÏî
-float bu[userNum];//ÓÃ»§Æ«ÖÃÏî
+float bi[itemNum];//é¡¹ç›®åç½®é¡¹
+float bu[userNum];//ç”¨æˆ·åç½®é¡¹
 
-float qi[itemNum][factorNum];//ÏîÄ¿Òò×Ó¾ØÕó
-float pu[userNum][factorNum];//ÓÃ»§Òò×Ó¾ØÕó
+float qi[itemNum][factorNum];//é¡¹ç›®å› å­çŸ©é˜µ
+float pu[userNum][factorNum];//ç”¨æˆ·å› å­çŸ©é˜µ
 
 
-//¼ÆËã´ı·Ö½â¾ØÕóÖĞËùÓĞÆÀ·ÖµÄÆ½¾ùÖµ
+//è®¡ç®—å¾…åˆ†è§£çŸ©é˜µä¸­æ‰€æœ‰è¯„åˆ†çš„å¹³å‡å€¼
 float Average(char* Filename)
 {
 	ifstream fin(Filename, ios::in);
@@ -52,7 +52,7 @@ float Average(char* Filename)
 	return result / cnt;
 }
 
-//¼ÆËãÁ½¸öÏòÁ¿ƒÈ»ı
+//è®¡ç®—ä¸¤ä¸ªå‘é‡å…§ç§¯
 float InnerProduct(float *v1, float *v2, int size)
 {
 	float result = 0.0;
@@ -61,7 +61,7 @@ float InnerProduct(float *v1, float *v2, int size)
 	return result;
 }
 
-//¼ÆËãÔ¤²âÆÀ·Ö
+//è®¡ç®—é¢„æµ‹è¯„åˆ†
 float PredictScore(float av, float bu, float bi, float *pu, float *qi)
 {
 	float pScore;
@@ -73,7 +73,7 @@ float PredictScore(float av, float bu, float bi, float *pu, float *qi)
 	return pScore;
 }
 
-//¼ÆËãRMSE
+//è®¡ç®—RMSE
 float Validate(char *testDataFile, float av, float *bu, float *bi, float pu[][factorNum], float qi[][factorNum])
 {
 	int cnt = 0;
@@ -109,8 +109,8 @@ float Validate(char *testDataFile, float av, float *bu, float *bi, float pu[][fa
 	return sqrt(rmse / cnt);
 }
 
-//ÑµÁ·Ä£ĞÍ
-void SVD(char *testDataFile, char *trainDataFile)
+//è®­ç»ƒæ¨¡å‹
+void Train(char *testDataFile, char *trainDataFile)
 {
 
 	for (int i = 0;i<itemNum;i++)
@@ -185,7 +185,7 @@ void SVD(char *testDataFile, char *trainDataFile)
 }
 
 
-//Ô¤²â·ÖÊı
+//é¢„æµ‹åˆ†æ•°
 void Predict(char *testDataFile, char *resultSaveFile)
 {
 	ifstream f1(testDataFile, ios::in);
@@ -222,16 +222,16 @@ void Predict(char *testDataFile, char *resultSaveFile)
 
 int main()
 {
-	char *trainDataFile = "u1.base";//ÑµÁ·¼¯
-	char *testDataFile = "u1.test";//²âÊÔ¼¯
-	char *resultSaveFile = "prediction.txt";//Ô¤²â½á¹û
+	char *trainDataFile = "u1.base";//è®­ç»ƒé›†
+	char *testDataFile = "u1.test";//æµ‹è¯•é›†
+	char *resultSaveFile = "prediction.txt";//é¢„æµ‹ç»“æœ
 
-	averageScore = Average("u.data");//Æ½¾ù·Ö
+	averageScore = Average("u.data");//å¹³å‡åˆ†
 
 	cout << "average score = " << averageScore << endl;
 
-	SVD(testDataFile, trainDataFile);//ÑµÁ·
-	Predict(testDataFile, resultSaveFile);//Ô¤²â
+	Train(testDataFile, trainDataFile);//è®­ç»ƒ
+	Predict(testDataFile, resultSaveFile);//é¢„æµ‹
 
 	system("pause");
 	return 0;
