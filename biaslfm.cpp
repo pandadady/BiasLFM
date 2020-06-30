@@ -10,9 +10,9 @@ using namespace std;
 float averageScore;//平均分
 const int userNum = 943;//用户数
 const int itemNum = 1682;//项目数
-const int factorNum = 10;//特征数
-float learnRate = 0.005;//学习速率
-float regularization = 0.05;//正则化系数
+const int factorNum = 16;//特征数
+float learnRate = 0.01;//学习速率
+float regularization = 0.15;//正则化系数
 
 float bi[itemNum];//项目偏置项
 float bu[userNum];//用户偏置项
@@ -108,7 +108,10 @@ float Validate(char *testDataFile, float av, float *bu, float *bi, float pu[][fa
 
 	return sqrt(rmse / cnt);
 }
-
+double getRandData(double min,double  max)
+{
+    return min +rand() / double(RAND_MAX/(max -min ));
+}
 //训练模型
 void Train(char *testDataFile, char *trainDataFile)
 {
@@ -121,14 +124,14 @@ void Train(char *testDataFile, char *trainDataFile)
 
 	float s = sqrt(factorNum);
 	srand((unsigned)time(NULL));
-
+    float val = sqrt(averageScore / float(factorNum));
 	for (int i = 0;i<itemNum;i++)
 		for (int j = 0;j<factorNum;j++)
-			qi[i][j] = (rand() % 1) / s;
+			qi[i][j] = getRandData(0,val);
 
 	for (int i = 0;i<userNum;i++)
 		for (int j = 0;j<factorNum;j++)
-			pu[i][j] = (rand() % 1) / s;
+			pu[i][j] = getRandData(0,val);
 
 	cout << "initialization end" << endl << "start training..." << endl;
 
